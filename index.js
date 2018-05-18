@@ -2,18 +2,16 @@ var fs = require('fs');
 var http = require('http');
 // var marked = require("marked");
 
-var indexHtml = function () {
-  return '<h1>Markdown Preview</h1><form>' + '<textarea id="source"></textarea>' + '</form>'
-};
-
 var port = process.env.PORT || 5000;
 http.createServer(function (request, response) {
-    response.setHeader('Content-Type', 'text/html; charset=utf-8');
+  response.setHeader('Content-Type', 'text/html; charset=utf-8');
 
-    if (request.url === '/') {
-        response.write(indexHtml());
-    }
-    response.end();
+  if (request.url === '/') {
+    response.write(fs.readFileSync('index.html'));
+  } else if (request.url === 'marked.js') {
+    response.write(fs.readFileSync('node_modules/marked/lib/marked.js'))
+  }
+  response.end();
 }).listen(port);
 
 console.log("Listening on port " + port);
