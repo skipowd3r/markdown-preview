@@ -1,0 +1,13 @@
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<h1>Markdown Preview</h1>
+<textarea id="source"></textarea>
+<div id="preview"></div>
+<button id="render" onclick="render()">Render</button>
+<script>
+function render() {
+  var markdown = document.getElementById('source').value;
+  var html = marked(markdown);
+  document.getElementById('preview').innerHTML = html;
+  return html;
+}
+</script>
