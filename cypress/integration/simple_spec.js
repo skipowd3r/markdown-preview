@@ -31,5 +31,5 @@ describe('The Page', function () {
     cy.get('textarea#source').type('# Hello');
     cy.get('button').click();
     cy.get('div#preview').should('include', 'Hello');
-  })
+  });
 });
