@@ -8,13 +8,21 @@ http.createServer(function (request, response) {
   var file;
   if (request.url === '/') {
     file = 'index.html';
-  } else if (request.url === 'marked.js') {
+  } else if (request.url.match(/\/?marked.js$/)) {
     file = 'node_modules/marked/lib/marked.js';
   } else {
     file = '.' + decodeURIComponent(request.url);
   }
 
-  var data = fs.readFileSync(file);
+  let data;
+  try {
+    data = fs.readFileSync(file);
+  } catch (error) {
+    console.log(error);
+    // todo: confirm this is a file not found error
+    data = "Error: " + error.toString();
+    response.statusCode = 404;
+  }
   response.write(data);
   response.end();
 }).listen(port);
