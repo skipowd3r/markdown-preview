@@ -36,9 +36,6 @@ describe('The Render button', function () {
     cy.get('textarea#source').type('# Hello');
     cy.get('button').click();
     cy.get('div#preview').should('be.visible');
-    // cy.get('div#preview').should('have.text', 'Hello');     // this is a full match, but we want a partial match, to ignore newlines etc.
-    // cy.get('div#preview').should('contain.text', 'Hello');  // bug: this does the same as have.text
-    // cy.get('div#preview').should('include.text', 'Hello');  // bug: this also does the same as have.text
     cy.get('div#preview').then((el)=> {
       assert.include(el.text(), 'Hello');
     });
@@ -47,10 +44,11 @@ describe('The Render button', function () {
 
   it('converts markdown to html', function () {
     cy.get('textarea#source').clear();
-    cy.get('textarea#source').type('# Hello');
+    cy.get('textarea#source').type('# Hello\n* bullet');
     cy.get('button').click();
     cy.get('div#preview').within(function () {
       cy.get('h1').should('have.text', 'Hello');
+      cy.get('li').should('have.text', 'bullet');
     });
   });
 });
