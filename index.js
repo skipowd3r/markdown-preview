@@ -8,8 +8,6 @@ http.createServer(function (request, response) {
   var file;
   if (request.url === '/') {
     file = 'index.html';
-  } else if (request.url.match(/\/?marked.js$/)) {
-    file = 'node_modules/marked/lib/marked.js';
   } else if (request.url.match(/\/?style.css$/)) {
     file = 'style.css';
   } else {
@@ -21,8 +19,10 @@ http.createServer(function (request, response) {
     console.log('Serving ' + file);
     data = fs.readFileSync(file);
     if (file.match(/\.css$/)) {
-      console.log("css");
       response.setHeader('Content-Type', 'text/css');
+    }
+    else if (file.match(/\.js$/)) {
+      response.setHeader('Content-Type', 'application/javascript');
     }
   } catch (error) {
     console.log(error);
