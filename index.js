@@ -10,13 +10,20 @@ http.createServer(function (request, response) {
     file = 'index.html';
   } else if (request.url.match(/\/?marked.js$/)) {
     file = 'node_modules/marked/lib/marked.js';
+  } else if (request.url.match(/\/?style.css$/)) {
+    file = 'style.css';
   } else {
     file = '.' + decodeURIComponent(request.url);
   }
 
   let data;
   try {
+    console.log('Serving ' + file);
     data = fs.readFileSync(file);
+    if (file.match(/\.css$/)) {
+      console.log("css");
+      response.setHeader('Content-Type', 'text/css');
+    }
   } catch (error) {
     console.log(error);
     // todo: confirm this is a file not found error
