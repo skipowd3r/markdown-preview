@@ -9,5 +9,5 @@ If you update the `master` branch, please also update the `solution` branch:
 
     git checkout solution
     git rebase master
-    git push origin solution
+    git push --force origin solution
     git checkout master
