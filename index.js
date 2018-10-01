@@ -1,37 +1,26 @@
-var fs = require('fs');
-var http = require('http');
+var static = require('node-static');
+var file = new static.Server('.');
+var port = process.env.PORT || 8080;
+var indexFile = 'index.html';
 
-var port = process.env.PORT || 5000;
-http.createServer(function (request, response) {
-  response.setHeader('Content-Type', 'text/html; charset=utf-8');
+require('http').createServer(function (request, response) {
+  request.addListener('end', function () {
+    var callback = function (e, rsp) {
+      if (e && e.status === 404) {
+        response.writeHead(e.status, e.headers);
+        response.end(request.url + " not found");
+      } else {
+        response.end("Not Found");
+        console.log(request, response);
+      }
+    };
 
-  var file;
-  if (request.url === '/') {
-    file = 'index.html';
-  } else if (request.url.match(/\/?style.css$/)) {
-    file = 'style.css';
-  } else {
-    file = '.' + decodeURIComponent(request.url);
-  }
-
-  let data;
-  try {
-    console.log('Serving ' + file);
-    data = fs.readFileSync(file);
-    if (file.match(/\.css$/)) {
-      response.setHeader('Content-Type', 'text/css');
+    console.log(request.url)
+    if (request.url === '/') {
+      file.serveFile(indexFile, 200, {}, request, response);
+    } else {
+      file.serve(request, response, callback);
     }
-    else if (file.match(/\.js$/)) {
-      response.setHeader('Content-Type', 'application/javascript');
-    }
-  } catch (error) {
-    console.log(error);
-    // todo: confirm this is a file not found error
-    data = "Error: " + error.toString();
-    response.statusCode = 404;
-  }
-  response.write(data);
-  response.end();
+  }).resume();
 }).listen(port);
-
 console.log("Listening on port " + port);
