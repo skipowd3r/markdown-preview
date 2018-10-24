@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Markdown Preview</h1>
+    <textarea id="source"></textarea>
+    <div id="preview">Preview Here</div>
+    <button id="render">Render</button>
+
+<script src='node_modules/marked/lib/marked.js'></script>
+<script>
+    let userText = document.getElementById('source');
+    let previewText = document.getElementById('preview');
+    let renderButton = document.getElementById('render');
+    let timeoutID = null;
+
+    function copyText (event) {
+        previewText.innerHTML = marked(userText.value);
+    };
+    renderButton.addEventListener('click', copyText);
+    userText.addEventListener('keyup', setTimer);
+
+    function setTimer() {
+        window.clearTimeout(timeoutID);
+        timeoutID = window.setTimeout(copyText, 1000);
+    };
+    
+</script>
+</body>
+</html>
